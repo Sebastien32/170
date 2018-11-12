@@ -3,25 +3,28 @@ import os
 import matplotlib.pyplot as plt
 import sys
 import numpy as np
-
+# Counts number of edges between two buses
 def num_bus_edges(g, num_buses, first_bus, second_bus):
-		bus_students = np.reshape(range(num_buses * num_buses), (num_buses, num_buses))
+		# Counter variable for friendships
 		total_edges = 0
+		# For each spot in the first bus
 		for i in range(num_buses):
+			# For each spot in the second bus
 			for j in range(num_buses):
+				# Convert student index to node number
 				student_one = i + (first_bus * num_buses)
+				# Convert student index to node number
 				student_two = j + (second_bus * num_buses)
-				#print(i, j, first_bus, second_bus, student_one, student_two, g.adj[student_one])
+				# If the second student is adjacent to the first (i.e. they are friends)
 				if(student_two in g.adj[student_one]):
+					# Add an edge
 					total_edges += 1
-		#print(total_edges)
-		return total_edges // 2
-
+		# Return total edges between two buses
+		return total_edges
 # Creates adversarial input graph
 # Uses largest square number of students possible
 # K buses each with k students forming a complete friendship graph
 # Then adds dummy friendships and rowdy groups
-
 def generate_input(max_students):
 	# One-line calculation of largest square less than
 	num_buses = int((max_students ** 0.5) // 1)
@@ -74,11 +77,12 @@ def generate_input(max_students):
 					g.add_edge(student, match)
 			# Remove the student from matches (regardless of if you added one)
 			potential_matches.remove(match)
-	# Add rowdy groups
-	#display_graph(g, k = 1, iterations = 200)
+	# Write file to directory
+	print(num_bus_edges(g, 4, 0, 1))
+	display_graph(g, 1, 500)
+	#nx.write_gml(g, "/Users/sebastienwhetsel/Documents/inputs/large/graph.gml", nx.readwrite.gml.literal_stringizer)
 
-	
-
+### Idk kristen did this ¯\_(ツ)_/¯
 def display_graph(graph, k, iterations):
 	# play around with k and iterations - more iterations = more centered around component, k = optimal node dist
 	pos=nx.spring_layout(graph, k = k, iterations = iterations)
@@ -89,4 +93,3 @@ if __name__ == '__main__':
 	size = int(sys.argv[1])
 	if size != None:
 		generate_input(size)
-	# small_output()
